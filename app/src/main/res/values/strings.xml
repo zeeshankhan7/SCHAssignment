@@ -1,3 +1,7 @@
 <resources>
-    <string name="app_name">MobileDataUsageApp</string>
+    <string name="app_name">Data Usage</string>
+
+    <!-- Main Activity -->
+    <string name="year">Year</string>
+    <string name="usage">Usage</string>
 </resources>
