@@ -14,6 +14,10 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            buildConfigField 'String', 'BASE_URL', '"https://data.gov.sg/api/"'
+        }
+        debug {
+            buildConfigField 'String', 'BASE_URL', '"https://data.gov.sg/api/"'
         }
     }
     compileOptions {
@@ -30,19 +34,34 @@ dependencies {
     androidTestImplementation 'androidx.test:runner:1.1.2-alpha01'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.2-alpha01'
 
-    // butter knife for view binding
-    implementation 'com.jakewharton:butterknife:10.1.0'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:10.1.0'
+    // Butter Knife
+    implementation "com.jakewharton:butterknife:$rootProject.butterKnifeVersion"
+    annotationProcessor "com.jakewharton:butterknife-compiler:$rootProject.butterKnifeVersion"
 
-    // card view
+    // Card View
     implementation 'androidx.cardview:cardview:1.0.0'
 
-    // snack bar
-    implementation 'com.google.android.material:material:1.1.0-alpha03'
+    // Snack Bar
+    implementation 'com.google.android.material:material:1.0.0'
 
-    // dagger 2
+    // Dagger 2
     implementation "com.google.dagger:dagger:$rootProject.daggerVersion"
     annotationProcessor "com.google.dagger:dagger-compiler:$rootProject.daggerVersion"
 
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0-rc01'
+    // Android Architecture Components
+    implementation "androidx.lifecycle:lifecycle-extensions:$rootProject.archLifecycleVersion"
+
+    // Retrofit
+    implementation "com.squareup.retrofit2:retrofit:$rootProject.retrofitVersion"
+    implementation "com.squareup.retrofit2:converter-gson:$rootProject.retrofitVersion"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:$rootProject.retrofitVersion"
+
+    // OkHttp
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.4.1'
+
+    // RxJava and RxAndroid
+    implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
+    implementation 'io.reactivex.rxjava2:rxjava:2.1.15'
+
+
 }

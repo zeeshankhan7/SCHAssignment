@@ -3,11 +3,13 @@ package com.channa.mobiledatausageapp.adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.channa.mobiledatausageapp.R;
-import com.channa.mobiledatausageapp.model.Quarter;
+import com.channa.mobiledatausageapp.data.model.Year;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -17,7 +19,7 @@ import butterknife.ButterKnife;
 
 public class MobileDataAdapter extends RecyclerView.Adapter<MobileDataAdapter.MobileDataViewHolder> {
 
-    private List<Quarter> quarterList;
+    private List<Year> yearList = new ArrayList<>();
 
     @NonNull
     @Override
@@ -30,18 +32,29 @@ public class MobileDataAdapter extends RecyclerView.Adapter<MobileDataAdapter.Mo
 
     @Override
     public void onBindViewHolder(@NonNull MobileDataViewHolder holder, int position) {
-        Quarter quarter = quarterList.get(position);
-        holder.textViewYear.setText(String.valueOf(quarter.getYear()));
-        holder.textViewUsage.setText(String.valueOf(quarter.getUsage()));
+        Year year = yearList.get(position);
+
+        holder.textViewYear.setText(String.valueOf(year.getYear()));
+
+        if (year.isYearCompleted())
+            holder.textViewUsage.setText(String.valueOf(year.getTotalUsage()));
+        else
+            holder.textViewUsage.setText(String.valueOf(year.getTotalUsage()) + "*");
+
+        if (!year.isDecreasedGrowth())
+            holder.imageButtonDetailedUsage.setVisibility(View.GONE);
+        else
+            holder.imageButtonDetailedUsage.setVisibility(View.VISIBLE);
+
     }
 
     @Override
     public int getItemCount() {
-        return quarterList.size();
+        return yearList.size();
     }
 
-    public void setQuarterList(List<Quarter> quarterList) {
-        this.quarterList = quarterList;
+    public void setYearList(List<Year> yearList) {
+        this.yearList = yearList;
     }
 
     public class MobileDataViewHolder extends RecyclerView.ViewHolder {
@@ -51,6 +64,9 @@ public class MobileDataAdapter extends RecyclerView.Adapter<MobileDataAdapter.Mo
 
         @BindView(R.id.tvUsage)
         TextView textViewUsage;
+
+        @BindView(R.id.iBtnDetailedUsage)
+        ImageButton imageButtonDetailedUsage;
 
         public MobileDataViewHolder(@NonNull View itemView) {
             super(itemView);

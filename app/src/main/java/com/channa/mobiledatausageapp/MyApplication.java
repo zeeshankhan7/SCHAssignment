@@ -2,9 +2,11 @@ package com.channa.mobiledatausageapp;
 
 import android.app.Application;
 
-import com.channa.mobiledatausageapp.dagger.ApplicationComponent;
-import com.channa.mobiledatausageapp.dagger.ApplicationModule;
-import com.channa.mobiledatausageapp.dagger.DaggerApplicationComponent;
+import com.channa.mobiledatausageapp.di.component.ApplicationComponent;
+import com.channa.mobiledatausageapp.di.component.DaggerApplicationComponent;
+import com.channa.mobiledatausageapp.di.module.ApplicationContextModule;
+import com.channa.mobiledatausageapp.di.module.DataModule;
+
 
 public class MyApplication extends Application {
 
@@ -16,8 +18,8 @@ public class MyApplication extends Application {
 
         applicationComponent = DaggerApplicationComponent
                 .builder()
-                .applicationModule(new ApplicationModule(this))
-                // .roomModule(new RoomModule(this))
+                .applicationContextModule(new ApplicationContextModule(this))
+                .dataModule(new DataModule())
                 .build();
 
     }

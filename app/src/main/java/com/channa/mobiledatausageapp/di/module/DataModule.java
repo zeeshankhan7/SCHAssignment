@@ -1,7 +1,6 @@
-package com.channa.mobiledatausageapp.dagger;
+package com.channa.mobiledatausageapp.di.module;
 
-import android.app.Application;
-
+import com.channa.mobiledatausageapp.network.APIClient;
 import com.channa.mobiledatausageapp.repository.MobileDataRepository;
 import com.channa.mobiledatausageapp.viewmodel.CustomViewModelFactory;
 
@@ -12,23 +11,12 @@ import dagger.Module;
 import dagger.Provides;
 
 @Module
-public class ApplicationModule {
-
-    private final Application application;
-
-    public ApplicationModule(Application application) {
-        this.application = application;
-    }
-
-    @Provides
-    Application provideApplication() {
-        return application;
-    }
+public class DataModule {
 
     @Provides
     @Singleton
-    MobileDataRepository provideQuoteRepository() {
-        return new MobileDataRepository();
+    MobileDataRepository provideMobileDataRepository(APIClient apiClient) {
+        return new MobileDataRepository(apiClient);
     }
 
     @Provides

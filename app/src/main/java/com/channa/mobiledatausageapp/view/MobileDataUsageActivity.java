@@ -28,6 +28,7 @@ public class MobileDataUsageActivity extends BaseActivity {
     private MobileDataAdapter mobileDataAdapter;
     private RecyclerView.LayoutManager layoutManager;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +37,7 @@ public class MobileDataUsageActivity extends BaseActivity {
         ((MyApplication) getApplication()).getApplicationComponent().inject(this);
 
         initViews();
+
     }
 
     @Override
@@ -44,7 +46,7 @@ public class MobileDataUsageActivity extends BaseActivity {
         initMobileDataUsageRecyclerView();
 
         mobileDataUsageViewModel = ViewModelProviders.of(this, viewModelFactory).get(MobileDataUsageViewModel.class);
-        mobileDataUsageViewModel.getQuarterList().observe(this, quarters -> mobileDataAdapter.setQuarterList(quarters));
+        mobileDataUsageViewModel.getYearlyMobileDataUsage().observe(this, yearList -> mobileDataAdapter.setYearList(yearList));
     }
 
     private void initMobileDataUsageRecyclerView() {

@@ -86,10 +86,12 @@
                 android:layout_weight="0.1">
 
                 <ImageButton
+                    android:id="@+id/iBtnDetailedUsage"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_centerInParent="true"
-                    android:background="@drawable/ic_attention_red_24dp" />
+                    android:background="@drawable/ic_attention_red_24dp"
+                    android:visibility="gone" />
 
             </RelativeLayout>
 
