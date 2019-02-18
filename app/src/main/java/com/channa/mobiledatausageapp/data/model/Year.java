@@ -5,10 +5,10 @@ import java.util.Comparator;
 import java.util.List;
 
 public class Year {
-    private String year;
+    private Integer year;
     private List<Quarter> quarters;
 
-    public Year(String year, List<Quarter> quarters) {
+    public Year(Integer year, List<Quarter> quarters) {
         this.year = year;
         initQuarters(quarters);
     }
@@ -63,7 +63,7 @@ public class Year {
         return usage;
     }
 
-    public String getYear() {
+    public Integer getYear() {
         return year;
     }
 
