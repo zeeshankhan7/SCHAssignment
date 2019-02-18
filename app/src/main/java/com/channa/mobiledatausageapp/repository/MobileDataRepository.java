@@ -24,7 +24,7 @@ public class MobileDataRepository {
     APIClient apiClient;
     private List<Year> yearList = new ArrayList<>();
 
-    private List<Quarter> quarterList = new ArrayList<>();
+
     private MutableLiveData<List<Year>> mutableYearList = new MutableLiveData<>();
 
     @Inject
@@ -37,14 +37,44 @@ public class MobileDataRepository {
             @Override
             public void onSuccessDatastoreResponse(DatastoreResponse datastoreResponse) {
 
-                for (QuarterResponse q : datastoreResponse.getResult().getRecords()) {
+                List<Quarter> quarterList = new ArrayList<>();
+
+                int yearIndex = 2008;
+                int yearEndIndex = 2018;
+
+                for (int i = 0; i < datastoreResponse.getResult().getRecords().size(); i++) {
+
+                    QuarterResponse q = datastoreResponse.getResult().getRecords().get(i);
+
                     Log.d(TAG, "Quarter: " + q.get_id() + " : " + q.getQuarter());
 
                     String quarterInfo[] = q.getQuarter().split("-");
-                    String year = quarterInfo[0];
+                    Integer year = Integer.parseInt(quarterInfo[0]);
                     String quarterName = quarterInfo[1];
 
-                    quarterList.add(new Quarter(q.get_id(), q.getVolume_of_mobile_data(), Integer.parseInt(year), quarterName));
+                    // this only executes within the given year range
+                    if (year >= 2008 && year <= yearEndIndex) {
+
+                        if (yearIndex == year) {
+                            quarterList.add(new Quarter(q.get_id(), q.getVolume_of_mobile_data(), year, quarterName));
+                        } else {
+                            yearList.add(new Year(yearIndex, quarterList));
+
+                            quarterList = new ArrayList<>();
+
+                            yearIndex++;
+
+                            // add the missed iteration's value
+                            quarterList.add(new Quarter(q.get_id(), q.getVolume_of_mobile_data(), year, quarterName));
+                        }
+
+                        // last element of this doesn't add to the years array as the loop stops
+                        if (i == datastoreResponse.getResult().getRecords().size() - 1) {
+                            yearList.add(new Year(year, quarterList));
+                        }
+
+                    }
+
                 }
                 mutableYearList.setValue(yearList);
             }

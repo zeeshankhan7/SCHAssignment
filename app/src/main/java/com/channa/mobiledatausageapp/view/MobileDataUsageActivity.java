@@ -46,7 +46,10 @@ public class MobileDataUsageActivity extends BaseActivity {
         initMobileDataUsageRecyclerView();
 
         mobileDataUsageViewModel = ViewModelProviders.of(this, viewModelFactory).get(MobileDataUsageViewModel.class);
-        mobileDataUsageViewModel.getYearlyMobileDataUsage().observe(this, yearList -> mobileDataAdapter.setYearList(yearList));
+        mobileDataUsageViewModel.getYearlyMobileDataUsage().observe(this, yearList -> {
+            mobileDataAdapter.setYearList(yearList);
+            mobileDataAdapter.notifyDataSetChanged();
+        });
     }
 
     private void initMobileDataUsageRecyclerView() {
