@@ -45,7 +45,10 @@ public class MobileDataUsageActivity extends BaseActivity {
     @Override
     protected void initViews() {
         super.initViews();
-
+        initMobileDataUsageRecyclerView(this);
+        // get mobile data usage without checking internet connection to use cache in uses where there are no internet connection
+        getMobileDataUsage();
+        
         if (!Utils.checkInternetConnection(this)) {
             showActionSnackBar("Retry", "No Internet Connection", new View.OnClickListener() {
                 @Override
@@ -54,7 +57,7 @@ public class MobileDataUsageActivity extends BaseActivity {
                 }
             });
         } else {
-            initMobileDataUsageRecyclerView(this);
+            getMobileDataUsage();
         }
 
 
@@ -68,6 +71,9 @@ public class MobileDataUsageActivity extends BaseActivity {
         recyclerViewMobileDataUsage.setAdapter(mobileDataAdapter);
 
         mobileDataUsageViewModel = ViewModelProviders.of(this, viewModelFactory).get(MobileDataUsageViewModel.class);
+    }
+
+    private void getMobileDataUsage() {
         mobileDataUsageViewModel.getYearlyMobileDataUsage().observe(this, yearList -> {
             mobileDataAdapter.setYearList(yearList);
             mobileDataAdapter.notifyDataSetChanged();
