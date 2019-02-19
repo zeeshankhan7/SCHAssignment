@@ -2,6 +2,7 @@ package com.channa.mobiledatausageapp.view;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.channa.mobiledatausageapp.MyApplication;
 import com.channa.mobiledatausageapp.R;
@@ -63,9 +64,14 @@ public class MobileDataUsageActivity extends BaseActivity {
     }
 
     private void getMobileDataUsage() {
-        mobileDataUsageViewModel.getYearlyMobileDataUsage().observe(this, yearList -> {
-            mobileDataAdapter.setYearList(yearList);
-            mobileDataAdapter.notifyDataSetChanged();
+        mobileDataUsageViewModel.getYearlyMobileDataUsage().observe(this, yearListWrapper -> {
+            if (null != yearListWrapper.getYearList()) {
+                mobileDataAdapter.setYearList(yearListWrapper.getYearList());
+                mobileDataAdapter.notifyDataSetChanged();
+            } else {
+                showSnackBar("Unexpected error occurred");
+                Log.e(TAG, "getMobileDataUsage: ", yearListWrapper.getThrowable());
+            }
         });
     }
 }

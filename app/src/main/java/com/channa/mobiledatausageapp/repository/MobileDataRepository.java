@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.channa.mobiledatausageapp.data.model.Quarter;
 import com.channa.mobiledatausageapp.data.model.Year;
+import com.channa.mobiledatausageapp.data.model.YearListWrapper;
 import com.channa.mobiledatausageapp.data.response.DatastoreResponse;
 import com.channa.mobiledatausageapp.data.response.QuarterResponse;
 import com.channa.mobiledatausageapp.network.APIClient;
@@ -25,14 +26,14 @@ public class MobileDataRepository {
     private List<Year> yearList = new ArrayList<>();
 
 
-    private MutableLiveData<List<Year>> mutableYearList = new MutableLiveData<>();
+    private MutableLiveData<YearListWrapper> mutableYearListWrapper = new MutableLiveData<>();
 
     @Inject
     public MobileDataRepository(APIClient apiClient) {
         this.apiClient = apiClient;
     }
 
-    public LiveData<List<Year>> getYearlyMobileDataUsage() {
+    public LiveData<YearListWrapper> getYearlyMobileDataUsage() {
         apiClient.getMobileDataUsage(new OnDatastoreResponse() {
             @Override
             public void onSuccessDatastoreResponse(DatastoreResponse datastoreResponse) {
@@ -76,16 +77,16 @@ public class MobileDataRepository {
                     }
 
                 }
-                mutableYearList.setValue(yearList);
+                mutableYearListWrapper.setValue(new YearListWrapper(yearList));
             }
 
             @Override
             public void onErrorResponse(Throwable e) {
-
+                mutableYearListWrapper.setValue(new YearListWrapper(e));
             }
         });
 
-        return mutableYearList;
+        return mutableYearListWrapper;
 
     }
 
