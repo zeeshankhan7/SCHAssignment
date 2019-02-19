@@ -2,7 +2,6 @@ package com.channa.mobiledatausageapp.view;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.view.View;
 
 import com.channa.mobiledatausageapp.MyApplication;
 import com.channa.mobiledatausageapp.R;
@@ -46,21 +45,11 @@ public class MobileDataUsageActivity extends BaseActivity {
     protected void initViews() {
         super.initViews();
         initMobileDataUsageRecyclerView(this);
-        // get mobile data usage without checking internet connection to use cache in uses where there are no internet connection
         getMobileDataUsage();
-        
+
         if (!Utils.checkInternetConnection(this)) {
-            showActionSnackBar("Retry", "No Internet Connection", new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    initViews();
-                }
-            });
-        } else {
-            getMobileDataUsage();
+            showSnackBar("No Internet Connection");
         }
-
-
     }
 
     private void initMobileDataUsageRecyclerView(Context context) {

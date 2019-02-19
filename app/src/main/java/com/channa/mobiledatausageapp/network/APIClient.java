@@ -6,6 +6,9 @@ import android.util.Log;
 import com.channa.mobiledatausageapp.BuildConfig;
 import com.channa.mobiledatausageapp.data.response.DatastoreResponse;
 import com.channa.mobiledatausageapp.network.action.OnDatastoreResponse;
+import com.channa.mobiledatausageapp.utility.Utils;
+
+import java.io.File;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -16,7 +19,8 @@ import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.Cache;
 import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
+import okhttp3.Request;
+import okhttp3.Response;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -29,17 +33,34 @@ public class APIClient {
     private APIInterface apiInterface;
     private Retrofit retrofit;
 
-    @Inject
     Context context;
 
     @Inject
     public APIClient(Context context) {
+        this.context = context;
         // use 10MB cache
-        long cacheSize = 10 * 1024 * 1024;
-        Cache cache = new Cache(context.getCacheDir(), cacheSize);
-        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-        OkHttpClient client = new OkHttpClient.Builder().cache(cache).addInterceptor(interceptor).build();
+        int cacheSize = 10 * 1024 * 1024;
+        File httpCacheDirectory = new File(context.getCacheDir(), "responses");
+        Cache cache = new Cache(httpCacheDirectory, cacheSize);
+
+        OkHttpClient client = new OkHttpClient.Builder().cache(cache).addNetworkInterceptor(chain -> {
+            Response response = chain.proceed(chain.request());
+            int maxAge = 60; // read from cache for 60 seconds even if there is internet connection
+            return response.newBuilder()
+                    .header("Cache-Control", "public, max-age=" + maxAge)
+                    .removeHeader("Pragma")
+                    .build();
+        }).addInterceptor(chain -> {
+            Request request = chain.request();
+            if (!Utils.checkInternetConnection(context)) {
+                int maxStale = 60 * 60 * 24 * 30; // Offline cache available for 30 days
+                request = request.newBuilder()
+                        .header("Cache-Control", "public, only-if-cached, max-stale=" + maxStale)
+                        .removeHeader("Pragma")
+                        .build();
+            }
+            return chain.proceed(request);
+        }).build();
 
         retrofit = new Retrofit.Builder()
                 .baseUrl(BuildConfig.BASE_URL)
