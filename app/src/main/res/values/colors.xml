@@ -8,4 +8,8 @@
     <!-- Main Activity -->
     <color name="text_color_data_usage_main_header">#808080</color>
     <color name="text_color_data_usage_main_value">#000000</color>
+
+    <!-- Quarter Status -->
+    <color name="quarter_status_increase_color">#007F00</color>
+    <color name="quarter_status_decrease_color">#9e0900</color>
 </resources>

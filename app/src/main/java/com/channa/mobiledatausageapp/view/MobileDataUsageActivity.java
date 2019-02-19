@@ -1,5 +1,6 @@
 package com.channa.mobiledatausageapp.view;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import com.channa.mobiledatausageapp.MyApplication;
@@ -43,7 +44,7 @@ public class MobileDataUsageActivity extends BaseActivity {
     @Override
     protected void initViews() {
         super.initViews();
-        initMobileDataUsageRecyclerView();
+        initMobileDataUsageRecyclerView(this);
 
         mobileDataUsageViewModel = ViewModelProviders.of(this, viewModelFactory).get(MobileDataUsageViewModel.class);
         mobileDataUsageViewModel.getYearlyMobileDataUsage().observe(this, yearList -> {
@@ -52,11 +53,11 @@ public class MobileDataUsageActivity extends BaseActivity {
         });
     }
 
-    private void initMobileDataUsageRecyclerView() {
+    private void initMobileDataUsageRecyclerView(Context context) {
         recyclerViewMobileDataUsage.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
         recyclerViewMobileDataUsage.setLayoutManager(layoutManager);
-        mobileDataAdapter = new MobileDataAdapter();
+        mobileDataAdapter = new MobileDataAdapter(context);
         recyclerViewMobileDataUsage.setAdapter(mobileDataAdapter);
     }
 }
