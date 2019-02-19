@@ -2,10 +2,12 @@ package com.channa.mobiledatausageapp.view;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.view.View;
 
 import com.channa.mobiledatausageapp.MyApplication;
 import com.channa.mobiledatausageapp.R;
 import com.channa.mobiledatausageapp.adapter.MobileDataAdapter;
+import com.channa.mobiledatausageapp.utility.Utils;
 import com.channa.mobiledatausageapp.viewmodel.MobileDataUsageViewModel;
 
 import javax.inject.Inject;
@@ -38,19 +40,24 @@ public class MobileDataUsageActivity extends BaseActivity {
         ((MyApplication) getApplication()).getApplicationComponent().inject(this);
 
         initViews();
-
     }
 
     @Override
     protected void initViews() {
         super.initViews();
-        initMobileDataUsageRecyclerView(this);
 
-        mobileDataUsageViewModel = ViewModelProviders.of(this, viewModelFactory).get(MobileDataUsageViewModel.class);
-        mobileDataUsageViewModel.getYearlyMobileDataUsage().observe(this, yearList -> {
-            mobileDataAdapter.setYearList(yearList);
-            mobileDataAdapter.notifyDataSetChanged();
-        });
+        if (!Utils.checkInternetConnection(this)) {
+            showActionSnackBar("Retry", "No Internet Connection", new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    initViews();
+                }
+            });
+        } else {
+            initMobileDataUsageRecyclerView(this);
+        }
+
+
     }
 
     private void initMobileDataUsageRecyclerView(Context context) {
@@ -59,5 +66,11 @@ public class MobileDataUsageActivity extends BaseActivity {
         recyclerViewMobileDataUsage.setLayoutManager(layoutManager);
         mobileDataAdapter = new MobileDataAdapter(context);
         recyclerViewMobileDataUsage.setAdapter(mobileDataAdapter);
+
+        mobileDataUsageViewModel = ViewModelProviders.of(this, viewModelFactory).get(MobileDataUsageViewModel.class);
+        mobileDataUsageViewModel.getYearlyMobileDataUsage().observe(this, yearList -> {
+            mobileDataAdapter.setYearList(yearList);
+            mobileDataAdapter.notifyDataSetChanged();
+        });
     }
 }

@@ -29,5 +29,4 @@ public abstract class BaseActivity extends AppCompatActivity {
                 .setActionTextColor(getResources().getColor(android.R.color.holo_red_light))
                 .show();
     }
-
 }

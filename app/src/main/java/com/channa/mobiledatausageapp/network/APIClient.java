@@ -30,14 +30,16 @@ public class APIClient {
     private Retrofit retrofit;
 
     @Inject
+    Context context;
+
+    @Inject
     public APIClient(Context context) {
         // use 10MB cache
         long cacheSize = 10 * 1024 * 1024;
         Cache cache = new Cache(context.getCacheDir(), cacheSize);
-
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-        OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).cache(cache).build();
+        OkHttpClient client = new OkHttpClient.Builder().cache(cache).addInterceptor(interceptor).build();
 
         retrofit = new Retrofit.Builder()
                 .baseUrl(BuildConfig.BASE_URL)
