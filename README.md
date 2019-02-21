@@ -12,4 +12,6 @@ Technologies and Features
 - Material Design, RecyclerView, CardView 
 
 Testing: Complete 
+
+
 Project status: Complete 
