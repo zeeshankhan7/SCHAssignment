@@ -18,15 +18,13 @@ public abstract class BaseActivity extends AppCompatActivity {
         ButterKnife.bind(this);
     }
 
-    protected void showSnackBar(String message) {
-        Snackbar.make(parentLayout, message, Snackbar.LENGTH_LONG)
-                .show();
-    }
-
-    protected void showActionSnackBar(String actionText, String message, View.OnClickListener listener) {
-        Snackbar.make(parentLayout, message, Snackbar.LENGTH_INDEFINITE)
-                .setAction(actionText, listener)
-                .setActionTextColor(getResources().getColor(android.R.color.holo_red_light))
-                .show();
+    protected void showErrorActionSnackBar(String message) {
+        final Snackbar snackbar = Snackbar.make(parentLayout, message, Snackbar.LENGTH_INDEFINITE);
+        snackbar.setAction("Dismiss", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                snackbar.dismiss();
+            }
+        }).setActionTextColor(getResources().getColor(android.R.color.holo_red_light)).show();
     }
 }

@@ -49,7 +49,7 @@ public class MobileDataUsageActivity extends BaseActivity {
         getMobileDataUsage();
 
         if (!Utils.checkInternetConnection(this)) {
-            showSnackBar("No Internet Connection");
+            showErrorActionSnackBar("No Internet Connection");
         }
     }
 
@@ -69,8 +69,8 @@ public class MobileDataUsageActivity extends BaseActivity {
                 mobileDataAdapter.setYearList(yearListWrapper.getYearList());
                 mobileDataAdapter.notifyDataSetChanged();
             } else {
-                showSnackBar("Unexpected error occurred");
-                Log.e(TAG, "getMobileDataUsage: ", yearListWrapper.getThrowable());
+                showErrorActionSnackBar(yearListWrapper.getError());
+                Log.e(TAG, "getMobileDataUsage: " + yearListWrapper.getError());
             }
         });
     }

@@ -35,6 +35,12 @@ public class MobileDataRepository {
 
     public LiveData<YearListWrapper> getYearlyMobileDataUsage() {
         apiClient.getMobileDataUsage(new OnDatastoreResponse() {
+
+            @Override
+            public void onErrorResponse(String error) {
+                mutableYearListWrapper.setValue(new YearListWrapper(error));
+            }
+
             @Override
             public void onSuccessDatastoreResponse(DatastoreResponse datastoreResponse) {
 
@@ -78,11 +84,6 @@ public class MobileDataRepository {
 
                 }
                 mutableYearListWrapper.setValue(new YearListWrapper(yearList));
-            }
-
-            @Override
-            public void onErrorResponse(Throwable e) {
-                mutableYearListWrapper.setValue(new YearListWrapper(e));
             }
         });
 

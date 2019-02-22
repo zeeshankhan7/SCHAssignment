@@ -5,10 +5,10 @@ import java.util.List;
 public class YearListWrapper {
 
     private List<Year> yearList;
-    private Throwable throwable;
+    private String error;
 
-    public YearListWrapper(Throwable throwable) {
-        this.throwable = throwable;
+    public YearListWrapper(String error) {
+        this.error = error;
     }
 
     public YearListWrapper(List<Year> yearList) {
@@ -23,11 +23,11 @@ public class YearListWrapper {
         this.yearList = yearList;
     }
 
-    public Throwable getThrowable() {
-        return throwable;
+    public String getError() {
+        return error;
     }
 
-    public void setThrowable(Throwable throwable) {
-        this.throwable = throwable;
+    public void setError(String error) {
+        this.error = error;
     }
 }
