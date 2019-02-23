@@ -110,7 +110,7 @@ public class APIClient {
                 });
     }
 
-    private String handleErrors(Throwable error) {
+    public String handleErrors(Throwable error) {
         if (error instanceof HttpException) {
             ResponseBody body = ((HttpException) error).response().errorBody();
             return handleError(body);
