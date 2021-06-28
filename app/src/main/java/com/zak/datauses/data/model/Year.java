@@ -1,4 +1,4 @@
-package com.channa.mobiledatausageapp.data.model;
+package com.zak.datauses.data.model;
 
 import java.util.Collections;
 import java.util.Comparator;
